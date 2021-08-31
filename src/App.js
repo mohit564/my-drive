@@ -7,21 +7,24 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Items from "./components/Items";
 
+export const ItemsContext = React.createContext();
+
+const API_URL = "http://localhost:5000/api/users/test";
+const server = axios.create({ baseURL: API_URL });
+
 function App() {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/users/test").then((res) => {
-      setItems(res.data);
-      setFilteredItems(res.data);
-    });
-  }, []);
+  const fetchItems = async () => {
+    const response = await server.get("/");
+    setItems(response.data);
+    setFilteredItems(response.data);
+  };
 
-  function handleFilter(type) {
-    if (!type) setFilteredItems(items);
-    else setFilteredItems(items.filter((item) => item.type === type));
-  }
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   return (
     <>
@@ -29,8 +32,16 @@ function App() {
         <Navbar />
       </header>
       <main id="main">
-        <Sidebar onClickHandler={handleFilter} />
-        <Items items={filteredItems} />
+        <ItemsContext.Provider
+          value={{
+            state1: [items, setItems],
+            state2: [filteredItems, setFilteredItems],
+            fetchItems: fetchItems,
+          }}
+        >
+          <Sidebar />
+          <Items />
+        </ItemsContext.Provider>
       </main>
       <footer>
         <p>
