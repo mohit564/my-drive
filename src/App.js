@@ -19,10 +19,8 @@ function App() {
   }, []);
 
   function handleFilter(type) {
-    if (!type) setFilteredItems([...items]);
-    else {
-      setFilteredItems(items.filter((item) => item.type === type));
-    }
+    if (!type) setFilteredItems(items);
+    else setFilteredItems(items.filter((item) => item.type === type));
   }
 
   return (
@@ -35,7 +33,9 @@ function App() {
         <Items items={filteredItems} />
       </main>
       <footer>
-        <p>Copyright &copy; {new Date().getFullYear()}. Made By Mohit Dhule</p>
+        <p>
+          Copyright &copy; {new Date().getFullYear()}. Created By Mohit Dhule
+        </p>
       </footer>
     </>
   );
