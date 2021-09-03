@@ -22,17 +22,21 @@ router.get("/api/users/:user", async (req, res) => {
   }
 });
 
-router.post("/api/users/:user", (req, res) => {
+router.post("/api/users/:user", async (req, res) => {
   const item = req.body;
   if (!item.name || !item.type || !item.path) {
     return res
       .status(400)
       .json({ error: "Item name, type and path is required" });
   }
-  createItem(item);
-  res
-    .status(201)
-    .json({ message: `${item.name} ${item.type} created successfully` });
+  const error = await createItem(item);
+  if (error) {
+    res.status(400).json({ message: error.replace(`${__dirname}`, "") });
+  } else {
+    res
+      .status(201)
+      .json({ message: `${item.name} ${item.type} created successfully` });
+  }
 });
 
 module.exports = router;

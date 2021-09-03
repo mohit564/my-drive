@@ -2,13 +2,30 @@ const fs = require("fs").promises;
 const path = require("path");
 
 async function createItem(item) {
-  if (item.type === "folder") {
-    await fs.mkdir(path.join(__dirname, "../", item.path, item.name));
-  } else {
-    await fs.writeFile(path.join(__dirname, "../", item.path, item.name), "");
+  const folderNameRegex = /^(\w+\.?)*\w+$/;
+  const fileNameRegex = /^[^<>:;,?"*|/]+$/;
+  try {
+    if (item.type === "folder") {
+      if (!item.name.match(folderNameRegex)) {
+        throw new Error("Invalid folder name: " + item.name);
+      }
+      await fs.mkdir(path.join(__dirname, "../", item.path, item.name));
+    } else {
+      if (!item.name.match(fileNameRegex)) {
+        throw new Error("Invalid file name: " + item.name);
+      }
+      await fs.writeFile(
+        path.join(__dirname, "../", item.path, item.name),
+        "",
+        { flag: "wx" },
+        function (err) {
+          throw new Error("File already exists: " + path.join(item.name));
+        }
+      );
+    }
+  } catch (error) {
+    return error.message;
   }
 }
 
 module.exports = createItem;
-
-createItem({ name: "test.txt", type: "file", path: "home/test" });
