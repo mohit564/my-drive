@@ -67,3 +67,19 @@ button {
 .modal-content button:active {
   opacity: 0.9;
 }
+
+.modal-body {
+  text-align: center;
+}
+
+.modal-cta {
+  display: flex;
+}
+
+.modal-cta button {
+  width: 40%;
+}
+
+.modal-cta button:first-of-type {
+  background: rgb(214, 1, 1);
+}

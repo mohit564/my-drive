@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import DeleteItemModal from "./Modals/DeleteItemModal";
 
 function setItemIcon(type, ext) {
   if (type === "folder") {
@@ -24,12 +25,33 @@ function setItemIcon(type, ext) {
 }
 
 export default function Item(props) {
-  const { name, type, ext } = props.item;
+  const { name, type, ext, path } = props.item;
+  const [deleteItemDisplay, setDeleteItemDisplay] = useState("");
+
+  function openDeleteItemModal() {
+    setDeleteItemDisplay((state) => (state = "block"));
+  }
+
+  function closeDeleteItemModal() {
+    setDeleteItemDisplay((state) => (state = "none"));
+  }
+
   return (
-    <div className="item">
-      <div className="item_icon">{setItemIcon(type, ext)}</div>
-      <div className="item_text">{name}</div>
-      <div className="item_delete">&times;</div>
-    </div>
+    <>
+      {deleteItemDisplay && (
+        <DeleteItemModal
+          item={{ name, type, ext, path }}
+          display={deleteItemDisplay}
+          onClickHandler={closeDeleteItemModal}
+        />
+      )}
+      <div className="item">
+        <div className="item_icon">{setItemIcon(type, ext)}</div>
+        <div className="item_text">{name}</div>
+        <div className="item_delete" onClick={openDeleteItemModal}>
+          &times;
+        </div>
+      </div>
+    </>
   );
 }
