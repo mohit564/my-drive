@@ -35,18 +35,13 @@ export default function CreateItemModal(props) {
     if (!values.type) errors.type = "Required";
     if (!values.path) errors.path = "Required";
 
-    if (values.type === "folder") {
-      errors.name = /^(\w+\.?)*\w+$/.test(values.name)
-        ? ""
-        : "Invalid Folder Name";
+    if (values.type === "folder" && !/^(\w+\.?)*\w+$/.test(values.name)) {
+      errors.name = "Invalid Folder Name";
     }
 
-    if (values.type === "file") {
-      errors.name = /^[^<>:;,?"*|/]+$/.test(values.name)
-        ? ""
-        : "Invalid File Name";
+    if (values.type === "file" && !/^[^<>:;,?"*|/]+$/.test(values.name)) {
+      errors.name = "Invalid File Name";
     }
-
     return errors;
   }
 
@@ -54,6 +49,7 @@ export default function CreateItemModal(props) {
     initialValues,
     validate,
     onSubmit,
+    validateOnMount: true,
   });
 
   const [error, setError] = useState({});
@@ -69,6 +65,7 @@ export default function CreateItemModal(props) {
     } catch (error) {
       setError({ message: error.response.data.message });
     } finally {
+      formik.resetForm();
       closeModal();
       fetchItems();
     }
@@ -81,12 +78,19 @@ export default function CreateItemModal(props) {
         <div
           className="modal"
           onClick={() => {
+            formik.resetForm();
             closeModal();
           }}
           style={{ display: props.display }}
         >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-btn" onClick={closeModal}>
+            <span
+              className="close-btn"
+              onClick={() => {
+                formik.resetForm();
+                closeModal();
+              }}
+            >
               &times;
             </span>
             <h2>Create File or Directory</h2>
@@ -100,11 +104,12 @@ export default function CreateItemModal(props) {
                       name="name"
                       placeholder="Enter Name"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.name}
                       autoComplete="off"
                     />
                   </label>
-                  {formik.errors.name ? (
+                  {formik.touched.name && formik.errors.name ? (
                     <div className="error">{formik.errors.name}</div>
                   ) : null}
                 </li>
@@ -114,13 +119,14 @@ export default function CreateItemModal(props) {
                     <select
                       name="type"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.type}
                     >
                       <option value="">Select Type</option>
                       <option value="file">File</option>
                       <option value="folder">Folder</option>
                     </select>
-                    {formik.errors.type ? (
+                    {formik.touched.type && formik.errors.type ? (
                       <div className="error">{formik.errors.type}</div>
                     ) : null}
                   </label>
@@ -131,6 +137,7 @@ export default function CreateItemModal(props) {
                     <select
                       name="path"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.path}
                     >
                       <option value="">Select Path</option>
@@ -140,12 +147,16 @@ export default function CreateItemModal(props) {
                         return <option key={item}>{item}</option>;
                       })}
                     </select>
-                    {formik.errors.path ? (
+                    {formik.touched.path && formik.errors.path ? (
                       <div className="error">{formik.errors.path}</div>
                     ) : null}
                   </label>
                 </li>
-                <button type="submit">CREATE</button>
+                {console.log(formik.isValid)}
+                {console.log(formik)}
+                <button type="submit" disabled={!formik.isValid}>
+                  CREATE
+                </button>
               </ul>
             </form>
           </div>
