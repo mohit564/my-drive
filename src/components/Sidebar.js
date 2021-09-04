@@ -1,31 +1,34 @@
 import React, { useState, useContext } from "react";
 import { ItemsContext } from "../App";
 
-import Modal from "./Modal";
+import CreateItemModal from "./Modals/CreateItemModal";
 
 export default function Sidebar() {
-  const { state1, state2 } = useContext(ItemsContext);
+  const { state1, state2, fetchItems } = useContext(ItemsContext);
   const items = state1[0];
   const setFilteredItems = state2[1];
 
-  const [modal, setModal] = useState({ display: "none" });
+  const [modal, setModal] = useState("none");
 
   function openModal() {
-    setModal({ display: "block" });
+    setModal("block");
   }
 
   function closeModal() {
-    setModal({ display: "none" });
+    setModal("none");
   }
 
   function handleFilter(type) {
-    if (!type) setFilteredItems(items);
-    else setFilteredItems(items.filter((item) => item.type === type));
+    if (!type) {
+      fetchItems();
+    } else {
+      setFilteredItems(items.filter((item) => item.type === type));
+    }
   }
 
   return (
     <>
-      <Modal display={modal.display} onClickHandler={closeModal} />
+      <CreateItemModal display={modal} onClickHandler={closeModal} />
       <nav className="sidebar">
         <ul>
           <li onClick={openModal}>

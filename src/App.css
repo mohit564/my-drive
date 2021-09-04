@@ -154,6 +154,11 @@ footer {
     50% 50% no-repeat rgb(249, 249, 249);
 }
 
+.error {
+  color: red;
+  font-weight: normal;
+}
+
 @media (min-width: 40rem) {
   .toggle-btn {
     display: none;
