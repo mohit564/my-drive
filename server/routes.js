@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const getItems = require("./utils/getItems");
 const createItem = require("./utils/createItem");
+const deleteItem = require("./utils/deleteItem");
 
 // configure router
 const router = express.Router();
@@ -36,6 +37,19 @@ router.post("/api/users/:user", async (req, res) => {
     res
       .status(201)
       .json({ message: `${item.name} ${item.type} created successfully` });
+  }
+});
+
+router.delete("/api/users/:user", async (req, res) => {
+  const item = req.body;
+  if (!item.name && !item.type && !item.path) {
+    res.status(400).json({ message: "Item name, type and path is required" });
+  }
+  const error = await deleteItem(item);
+  if (error) {
+    res.status(400).json({ message: error.message });
+  } else {
+    res.status(204).send();
   }
 });
 
