@@ -24,6 +24,11 @@ async function createItem(item) {
       );
     }
   } catch (error) {
+    if (error.message.includes("EEXIST")) {
+      error.message =
+        "Item already exists: " +
+        error.message.slice(error.message.indexOf("'"));
+    }
     return error.message;
   }
 }
