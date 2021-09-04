@@ -17,7 +17,7 @@ export default function ErrorModal(props) {
           &times;
         </span>
         <h2 className="modal-title error">Error</h2>
-        <h4 style={{ textAlign: "center" }}>{error.message}</h4>
+        <h4 className="modal-body">{error.message}</h4>
         <button onClick={closeModal}>Try Again</button>
       </div>
     </div>
