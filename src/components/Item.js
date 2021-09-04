@@ -29,6 +29,7 @@ export default function Item(props) {
     <div className="item">
       <div className="item_icon">{setItemIcon(type, ext)}</div>
       <div className="item_text">{name}</div>
+      <div className="item_delete">&times;</div>
     </div>
   );
 }

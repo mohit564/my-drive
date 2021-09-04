@@ -130,17 +130,18 @@ footer {
 
 .content .item {
   display: grid;
-  grid-template-columns: 40px 210px;
+  grid-template-columns: 40px 210px 10px;
   padding: 1rem;
   background-color: white;
   border-radius: 0.25em;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   font-size: 1.2rem;
-  cursor: pointer;
 }
 
-.content .item:hover {
-  background: #ddd;
+.item .item_delete:hover,
+.item .item_delete:active {
+  cursor: pointer;
+  opacity: 0.75;
 }
 
 .loader {
