@@ -3,8 +3,9 @@ import axios from "axios";
 import ErrorModal from "./ErrorModal";
 import { ItemsContext } from "../../App";
 
-const API_URL = "http://localhost:5000/api/users/test";
-const server = axios.create({ baseURL: API_URL });
+const baseURL = process.env.REACT_APP_BASE_URL;
+const server = axios.create({ baseURL: baseURL });
+const USER = "test";
 
 const DeleteItemModal = (props) => {
   const { fetchItems } = useContext(ItemsContext);
@@ -16,7 +17,7 @@ const DeleteItemModal = (props) => {
 
   async function deleteItem() {
     try {
-      await server.delete("", { data: { ...item } });
+      await server.delete(`/api/users/${USER}`, { data: { ...item } });
       fetchItems();
     } catch (error) {
       setError({ message: error.response.data.message });

@@ -9,8 +9,9 @@ import "./Modal.css";
 
 import { ItemsContext } from "../../App";
 
-const API_URL = "http://localhost:5000/api/users/test";
-const server = axios.create({ baseURL: API_URL });
+const baseURL = process.env.REACT_APP_BASE_URL;
+const server = axios.create({ baseURL: baseURL });
+const USER = "test";
 
 export default function CreateItemModal(props) {
   const { state1, fetchItems } = useContext(ItemsContext);
@@ -57,7 +58,7 @@ export default function CreateItemModal(props) {
 
   async function createItem() {
     try {
-      await server.post("/", {
+      await server.post(`/api/users/${USER}`, {
         name: formik.values.name,
         type: formik.values.type,
         path: formik.values.path,

@@ -9,15 +9,16 @@ import Items from "./components/Items";
 
 export const ItemsContext = React.createContext();
 
-const API_URL = "http://localhost:5000/api/users/test";
-const server = axios.create({ baseURL: API_URL });
+const baseURL = process.env.REACT_APP_BASE_URL;
+const server = axios.create({ baseURL: baseURL });
+const USER = "test";
 
 function App() {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
 
   const fetchItems = async () => {
-    const response = await server.get("/");
+    const response = await server.get(`/api/users/${USER}`);
     setItems(response.data);
     setFilteredItems(response.data);
   };
