@@ -152,8 +152,6 @@ export default function CreateItemModal(props) {
                     ) : null}
                   </label>
                 </li>
-                {console.log(formik.isValid)}
-                {console.log(formik)}
                 <button type="submit" disabled={!formik.isValid}>
                   CREATE
                 </button>
